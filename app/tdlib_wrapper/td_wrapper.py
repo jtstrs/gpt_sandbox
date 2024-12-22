@@ -51,8 +51,8 @@ def td_json_client_destroy(client):
 def td_json_client_send(client, message: str):
     td_lib_dll.td_json_client_send_wrapper(client, message.encode(DEFAULT_ENCODING))
 
-def td_json_client_receive(client, message: str) -> str:
-    return td_lib_dll.td_json_client_receive_wrapper(client, message.encode(DEFAULT_ENCODING))
+def td_json_client_receive(client, timeout: float) -> str:
+    return td_lib_dll.td_json_client_receive_wrapper(client, timeout)
 
 def td_json_client_execute(client, message: str) -> str:
     return td_lib_dll.td_json_client_execute_wrapper(client, message.encode(DEFAULT_ENCODING))
