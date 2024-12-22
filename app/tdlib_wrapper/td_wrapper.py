@@ -1,10 +1,5 @@
 import ctypes
 
-# void *td_json_client_create_wrapper();
-# void td_json_client_send_wrapper(void *client, const char *request);
-# const char *td_json_client_receive_wrapper(void *client, double timeout);
-# const char *td_json_client_execute_wrapper(void *client, const char *request);
-# void td_json_client_destroy_wrapper(void *client);
 
 td_lib_dll = ctypes.CDLL("libs/libTDLibWrapper.so")
 
@@ -21,6 +16,14 @@ td_lib_dll.td_execute_wrapper.argtypes = [ctypes.c_char_p]
 td_lib_dll.td_json_client_create_wrapper.restype = ctypes.c_void_p
 
 td_lib_dll.td_json_client_destroy_wrapper.argtypes = [ctypes.c_void_p]
+
+td_lib_dll.td_json_client_send_wrapper.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
+
+td_lib_dll.td_json_client_receive_wrapper.restype = ctypes.c_char_p
+td_lib_dll.td_json_client_receive_wrapper.argtypes = [ctypes.c_void_p, ctypes.c_double]
+
+td_lib_dll.td_json_client_execute_wrapper.restype = ctypes.c_char_p
+td_lib_dll.td_json_client_execute_wrapper.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
 
 
 def td_create_client_id() -> int:
@@ -44,3 +47,11 @@ def td_json_client_create():
 def td_json_client_destroy(client):
     td_lib_dll.td_json_client_destroy_wrapper(client)
 
+def td_json_client_send(client, message):
+    td_lib_dll.td_json_client_send_wrapper(client, message)
+
+def td_json_client_receive(client, message):
+    return td_lib_dll.td_json_client_receive_wrapper(client, message)
+
+def td_json_client_execute(client, message):
+    return td_lib_dll.td_json_client_execute_wrapper(client, message)
