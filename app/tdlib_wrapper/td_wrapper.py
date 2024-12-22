@@ -1,5 +1,6 @@
 import ctypes
 
+DEFAULT_ENCODING = "utf-8"
 
 td_lib_dll = ctypes.CDLL("libs/libTDLibWrapper.so")
 
@@ -30,13 +31,13 @@ def td_create_client_id() -> int:
     return td_lib_dll.td_create_client_id_wrapper()
 
 def td_send(client_id: int, request: str):
-    td_lib_dll.td_send_wrapper(client_id, request)
+    td_lib_dll.td_send_wrapper(client_id, request.encode(DEFAULT_ENCODING))
 
 def td_receive(timeout: float) -> str:
-    td_lib_dll.td_receive_wrapper(timeout)
+    return td_lib_dll.td_receive_wrapper(timeout).decode(DEFAULT_ENCODING)
 
 def td_execute(request: str) -> str:
-    td_lib_dll.td_execute_wrapper(request)
+    return td_lib_dll.td_execute_wrapper(request.encode(DEFAULT_ENCODING)).decode(DEFAULT_ENCODING)
 
 def td_set_log_message_callback(max_verbosity_level: int, callback):
     td_lib_dll.td_set_log_message_callback_wrapper(max_verbosity_level, callback)
@@ -47,11 +48,11 @@ def td_json_client_create():
 def td_json_client_destroy(client):
     td_lib_dll.td_json_client_destroy_wrapper(client)
 
-def td_json_client_send(client, message):
-    td_lib_dll.td_json_client_send_wrapper(client, message)
+def td_json_client_send(client, message: str):
+    td_lib_dll.td_json_client_send_wrapper(client, message.encode(DEFAULT_ENCODING))
 
-def td_json_client_receive(client, message):
-    return td_lib_dll.td_json_client_receive_wrapper(client, message)
+def td_json_client_receive(client, message: str) -> str:
+    return td_lib_dll.td_json_client_receive_wrapper(client, message.encode(DEFAULT_ENCODING))
 
-def td_json_client_execute(client, message):
-    return td_lib_dll.td_json_client_execute_wrapper(client, message)
+def td_json_client_execute(client, message: str) -> str:
+    return td_lib_dll.td_json_client_execute_wrapper(client, message.encode(DEFAULT_ENCODING))
